@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hamza WhatsApp Bot</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #101010; color: white; text-align: center; padding: 50px; }
+    input, button { padding: 10px; margin: 10px; border-radius: 5px; border: none; }
+    button { background: #00ffcc; color: black; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🤖 Hamza WhatsApp Bot</h1>
+  <p>Enter your WhatsApp number (in international format):</p>
+  <input type="text" id="number" placeholder="923001234567" />
+  <button onclick="generateCode()">Generate Pairing Code</button>
+  <div id="codeDisplay"></div>
+  <script>
+    async function generateCode() {
+      const number = document.getElementById('number').value;
+      const res = await fetch('/generate-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ number })
+      });
+      const data = await res.json();
+      document.getElementById('codeDisplay').innerText = "Pairing Code: " + data.code;
+    }
+  </script>
+</body>
+</html>
