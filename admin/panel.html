@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { background: #111; color: #fff; padding: 20px; font-family: sans-serif; }
+    input, button { padding: 10px; margin: 10px; border: none; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    td, th { border: 1px solid #333; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel Login</h2>
+  <input type="password" id="adminPass" placeholder="Enter Admin Password" />
+  <button onclick="login()">Login</button>
+  <div id="data"></div>
+
+  <script>
+    async function login() {
+      const password = document.getElementById('adminPass').value;
+      const res = await fetch('/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const users = data.users.map(u => \`<tr><td>\${u.number}</td><td>\${u.code}</td><td>\${new Date(u.time).toLocaleString()}</td></tr>\`).join('');
+        document.getElementById('data').innerHTML = \`
+          <h3>Active Users</h3>
+          <table><tr><th>Number</th><th>Code</th><th>Time</th></tr>\${users}</table>\`;
+      } else {
+        alert("Incorrect Password!");
+      }
+    }
+  </script>
+</body>
+</html>
